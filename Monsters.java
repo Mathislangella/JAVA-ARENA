@@ -10,21 +10,21 @@ public class Monsters {
     private int xp;
     private int xpCap;
 
-    public Monsters(String nom) {
+    public Monsters(String nom,int level) {
         this.info = InfoMonstre.get(nom);
 
         this.pvMax = info.pvBase;
         this.pv = pvMax;
         this.dmg = info.attaqueBase;
-
-        this.level = 1;
+    
+        this.level = level;
         this.xp = 0;
         this.xpCap = 100;
     }
 
     public void gainXP(int amount) {
         xp += amount;
-        while (xp >= xpCap) {
+        while (xp >= xpCap) {   
             xp -= xpCap;
             level++;
             pvMax += 5;

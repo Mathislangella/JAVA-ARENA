@@ -1,31 +1,38 @@
 import java.util.Scanner;
 
-// execute dans un cmd: javac *.java && java Main.java 
+// execute dans un cmd: javac *.java && java Main
 public class Main {
     public static void main(String[] args) {
-        // outils
-        Clear clear = new Clear();
+//-------------------Initialisation-------------------------
         Scanner scanner = new Scanner(System.in);
-        // initialisation des objets
+
         Menu menu = new Menu();
         Tamer tamer = null;
-
-        clear.ClearConsoleFake();
-        switch (menu.MenuLunch()) {
+        Shop shop = new Shop();
+//----------------------------------------------------------
+        String choix = menu.MenuLunch();
+        switch (choix) {
             case "leave":
                 scanner.close();
                 return;
             case "new":
-                tamer = new Tamer(null, new Inventaire(), 50);
-                // create un fichier csv avec les info du tamer
-            case "load":
-                //load game
+                tamer = new Tamer(null,new Inventaire(),2000 );
+                menu.MenuStarter(tamer);
                 break;
+            case "load":
+                tamer = LoadManager.loadTamer("save.csv");
+                if (tamer == null) {
+                    tamer = new Tamer(null,new Inventaire(),2000);
+                }
+                break;
+            default:
+                System.out.println("Choix invalide");
+                scanner.close();
+                return;
         }
-        menu.MenuStarter(tamer);
 
         while (true) {
-            menu.menu(tamer);
+            menu.menu(tamer, shop);
         }
     }
 }

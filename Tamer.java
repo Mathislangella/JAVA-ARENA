@@ -1,16 +1,17 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Tamer {
     private String name;
     private ArrayList<Monsters> team = new ArrayList<Monsters>();
     private Inventaire inventaire;
-    private int credit;
+    private int money;
 
-    public Tamer(ArrayList<Monsters> team, Inventaire inventaire, int credit) {
+    public Tamer(ArrayList<Monsters> team, Inventaire inventaire, int money) {
         this.name = "Ash";
         setTeam(team);
         this.inventaire = inventaire;
-        this.credit = credit;
+        this.money = money;
     }
     
     public String getName() {
@@ -34,17 +35,37 @@ public class Tamer {
         this.team.add(monstre);
     }
 
-    public Inventaire getInventaire() {
-        return this.inventaire;
+    public HashMap<Consomable, Integer> getInventaire() {
+        return this.inventaire.getInventaire();
     }
     public void setInventaire(Inventaire inventaire) {
         this.inventaire = inventaire;
     }
+    public Inventaire getInventaireObj() {
+        return inventaire;
+    }
 
-    public int getCredit() {
-        return this.credit;
+    public int getMoney() {
+        return this.money;
     }
-    public void setCredit(int credit) {
-        this.credit = credit;
+    public void setMoney(int money) {
+        this.money = money;
     }
+
+    public void addMoney(int amount) {
+        this.money += amount;
+    }
+    public boolean removeMoney(int amount) {
+        if (this.money >= amount) {
+            this.money -= amount;
+            return true;
+        }
+        return false;
+    }
+
+    public void addConsomable(Consomable consomable, int quantite) {
+        this.inventaire.addConsomable(consomable, quantite);
+    }
+
+
 }
