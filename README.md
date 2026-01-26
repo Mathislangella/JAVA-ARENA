@@ -1,7 +1,7 @@
-#  Java Arena – Guide de lancement (macOS)
+#  Java Arena – Guide de lancement (macOS/Windows)
 
 Ce projet est un jeu Java développé en **programmation orientée objet (POO)**.
-Ce guide explique **comment compiler et lancer le jeu sur macOS** 
+Ce guide explique **comment compiler et lancer le jeu sur macOS et Windows** 
 
 ---
 
