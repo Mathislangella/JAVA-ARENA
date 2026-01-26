@@ -40,29 +40,15 @@ JAVA-ARENA/
 │
 ├── class/              # Fichiers compilés (.class) (créé automatiquement)
 ├── saves/              # Sauvegardes (.csv)
+├── run.bat             # Lanceur windows (double‑clic)
 ├── run.command         # Lanceur macOS (double‑clic)
-└── README_MAC.md
+└── README.md
 ```
 
  **Ne pas modifier l’arborescence**, sinon le jeu ne se lancera pas.
-
-
-
-##  Autorisation macOS (première fois uniquement)
-
-Si macOS bloque l’exécution :
-
-1. Double‑clique sur `run.command`
-2. macOS affiche un message de sécurité
-3. Ouvre **Réglages Système → Sécurité et confidentialité**
-4. Clique sur **Autoriser quand même**
-5. Relance `run.command`
-
- Cette étape n’est nécessaire **qu’une seule fois**
-
 ---
 
-##  Contenu du lanceur `run.command`
+##  Contenu du lanceur `run.bat`
 
 ```bash
 @echo off
