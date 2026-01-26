@@ -9,18 +9,21 @@ Ce guide explique **comment compiler et lancer le jeu sur macOS**
 
 Avant de lancer le jeu, assure‑toi d’avoir :
 
-* Windows 10 / 11
-* Java JDK installé (Java 17 recommandé)
+* macOS
+* **Java JDK 17 ou supérieur** installé
 
   ```bash
-  java -version
-  javac -version
-
+  java --version
   ```
 
   Si Java n’est pas installé :
   👉 [https://www.oracle.com/java/technologies/downloads/](https://www.oracle.com/java/technologies/downloads/)
 
+**Première utilisation (obligatoire)**
+*  Ouvrez le Terminal
+*  Allez dans le dossier du projet
+*  Rendre le fichier exécutable :
+*  chmod +x run.command
 ---
 
 ##  Structure du projet
@@ -72,19 +75,15 @@ Si macOS bloque l’exécution :
 ##  Contenu du lanceur `run.command`
 
 ```bash
-@echo off
+#!/bin/bash
 
-REM Crée le dossier class s'il n'existe pas
-if not exist class mkdir class
+cd "$(dirname "$0")"
 
-REM Compile tous les fichiers Java
-for /R src %%f in (*.java) do javac -d class "%%f"
-
-REM Lance le jeu
+mkdir -p class
+javac -d class $(find src -name "*.java")
 java -cp class src.core.Main
 
-pause
-
+read -p "Appuyez sur Entrée pour fermer..."
 ```
 
 ---

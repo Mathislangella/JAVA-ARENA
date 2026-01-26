@@ -241,7 +241,7 @@ public class Menu {
                     Battle(tamer);
                     return;
                 case "2":
-                    MenuInventaire(tamer);
+                    MenuInventaire(tamer,null);
                     break;
                 default:
                     System.err.println("Vous devez choisir entre 0,1 et 2");
@@ -249,7 +249,8 @@ public class Menu {
         }
     }
 
-    private void MenuInventaire(Tamer tamer) {
+    private String MenuInventaire(Tamer tamer,Monsters monstre_wild) {
+        Monsters monstre = null;
         while (true) {
             System.out.println("Ash ouvre son sac à dos.\n");
             System.out.println("╔══════╦══════════╦══════════════════════════════════════╗");
@@ -269,11 +270,21 @@ public class Menu {
             clear.ClearConsoleFake();
 
             if (choix.equals("0")) {
-                return;
+                return "";
             } else if (Integer.parseInt(choix) > 0 && Integer.parseInt(choix) <= tamer.getInventaire().size()) {
                 Consomable selectedItem = (Consomable) tamer.getInventaire().keySet().toArray()[Integer.parseInt(choix) - 1];
                 System.out.println("Vous avez utilisé un(e) " + selectedItem.getName() + ".");
-                UseConsomable(selectedItem, tamer,null);
+                if (selectedItem.getType() == "Capture"){
+                    monstre = monstre_wild;
+                }
+                String repconso = UseConsomable(selectedItem, tamer,monstre);
+                if (repconso == "capturer") {
+                    return "capturer";
+                }else if (repconso == "pas capturer"){
+                    return "pas capturer";
+                }else if (repconso == "trop de vie"){
+                    return "trop de vie";
+                }
             } else {
                 System.err.println("Vous devez choisir un nombre entre 0 et " + tamer.getInventaire().size());
             }
@@ -360,7 +371,17 @@ public class Menu {
                     monstre_choisi = ChoosMonster(tamer);
                     break;
                 case "3":
-                    MenuInventaire(tamer);
+                    String rep = MenuInventaire(tamer,monstre_wild);
+                    if (rep == "capturer") {
+                        System.out.println("vous avez capturer "+monstre_wild.getNom()+" lv : "+monstre_wild.getLevel() );
+                        tamer.addTeam(monstre_wild);
+                        monstre_choisi.gainXP(50);
+                        return;
+                    }else if (rep == "pas capturer") {
+                        System.out.println("vous n'avez pas réussi a capturer "+monstre_wild.getNom());
+                    }else if (rep == "pas capturer") {
+                        System.out.println("vous ne pouvez pas capturer "+monstre_wild.getNom()+" il a trop de pv .");
+                    }
                     break;
                 case "4":
                     System.err.println("Vous essayez de fuire");
@@ -434,7 +455,7 @@ public class Menu {
     }
 
 //----------------- OUTILS ----------------------//
-    private void UseConsomable(Consomable selectedItem, Tamer tamer ,Monsters monstre_wild) {
+    private String UseConsomable(Consomable selectedItem, Tamer tamer ,Monsters monstre_wild) {
         if (selectedItem.getType().equals("Potion")) {
             System.out.println("Choisissez le monstre à soigner :");
             while (true) {
@@ -447,23 +468,23 @@ public class Menu {
                 if (monstreIndex >= 0 && monstreIndex < tamer.getTeam().size()) {
                     if (tamer.getTeam().get(monstreIndex).IsKO()) {
                         System.err.println("Choix invalide. Se pokemon est KO pour le relever utiliser un rappel");
-                        break;
+                        return "";
                     }else{
                         if (tamer.getTeam().get(monstreIndex).getPv() == tamer.getTeam().get(monstreIndex).getPvmax()){
                             System.err.println("Choix invalide. Se pokemon a deja ses PV aux max");
-                            break;
+                            return "";
                         }else {
                             Monsters monstreChoisi = tamer.getTeam().get(monstreIndex);
                         int newPv = Math.min(monstreChoisi.getPv() + selectedItem.getPuissance(), monstreChoisi.getPvmax());
                         monstreChoisi.setPv(newPv);
                         System.out.println(monstreChoisi.getNom() + " a été soigné et a maintenant " + monstreChoisi.getPv() + " PV.");
                         tamer.getInventaireObj().removeConsomable(selectedItem.getName(), 1);
-                        return;
+                        return "";
                         }
                     }
                 } else {
                     System.err.println("Choix invalide. Veuillez réessayer. choisissez un nombre entre 1 et " + tamer.getTeam().size());
-                    break;
+                    return "";
                 }
             }
         }else if(selectedItem.getType().equals("Rappel")) {
@@ -482,19 +503,31 @@ public class Menu {
                         monstreChoisi.setPv(newPv);
                         System.out.println(monstreChoisi.getNom() + " a été relever et a maintenant " + monstreChoisi.getPv() + " PV.");
                         tamer.getInventaireObj().removeConsomable(selectedItem.getName(), 1);
-                        return;
+                        return "";
                     }else{
                         System.err.println("Choix invalide. Se pokemon n'es pas KO pour le soigner utilisez une potion");
-                        break;
+                        return "";
                     }
                 } else {
                     System.err.println("Choix invalide. Veuillez réessayer. choisissez un nombre entre 1 et " + tamer.getTeam().size());
-                    break;
+                    return "";
                 }
             }
         }else if(selectedItem.getType().equals("Capture") && (monstre_wild != null)) {
-            System.out.println("systeme de capture pas encore dev");
+            if (monstre_wild.Is30()){
+                double pvRatio = (double) monstre_wild.getPv() / monstre_wild.getPvmax();
+                double baseChance = 0.3; // 30%
+                double chance = baseChance * selectedItem.getPuissance() * (1 - pvRatio);
+                chance = Math.min(chance, 0.95);
+                chance = Math.max(chance, 0.02);
+                if (Math.random() < chance){
+                    return "capturer";
+                }
+                return "pas capturer";
+            }
+            return "trop de vie";
         }
+        return "";
     }
 
     private String Barre_de_vie(int pv_actuels, int pv_max, int longueur) {

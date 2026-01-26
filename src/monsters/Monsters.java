@@ -61,6 +61,10 @@ public class Monsters {
         }
     }
 
+    public boolean Is30() {
+        return ((pv / pvMax * 100) <= 30);
+    }
+
     public String getNom() { return info.nom; }
     public String getType() { return info.type; }
     public int getPv() { return this.pv; }
