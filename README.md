@@ -5,18 +5,25 @@ Ce guide explique **comment compiler et lancer le jeu sur macOS**
 
 ---
 
-##  Prérequis
+# Java Arena
 
-Avant de lancer le jeu, assure‑toi d’avoir :
+## Pré-requis
+- Java 17 ou plus installé sur votre machine
+- Pour macOS : Terminal pour exécuter le script `.command`
+- Pour Windows : Invite de commandes pour exécuter le script `.bat`
 
-* Windows 10 / 11
-* Java JDK installé (Java 17 recommandé)
+## Lancer le jeu
 
-  ```bash
-  java -version
-  javac -version
+### Windows
+1. Double-cliquez sur `run.bat`
+2. Le jeu se compile et se lance automatiquement
 
-  ```
+### macOS
+1. Ouvrez Terminal et placez-vous dans le dossier du projet, ou double-cliquez sur `run.command`
+2. Si nécessaire, rendez le script exécutable :
+   ```bash
+   chmod +x run.command
+
 
   Si Java n’est pas installé :
   👉 [https://www.oracle.com/java/technologies/downloads/](https://www.oracle.com/java/technologies/downloads/)
@@ -39,21 +46,7 @@ JAVA-ARENA/
 
  **Ne pas modifier l’arborescence**, sinon le jeu ne se lancera pas.
 
----
 
-## ▶️ Lancer le jeu (méthode recommandée)
-
-### 1️⃣ Double‑clique sur :
-
-```
-run.command
-```
-
-➡️ Une fenêtre Terminal s’ouvre automatiquement
-➡️ Le projet est compilé
-➡️ Le jeu se lance
-
----
 
 ##  Autorisation macOS (première fois uniquement)
 
@@ -84,6 +77,24 @@ REM Lance le jeu
 java -cp class src.core.Main
 
 pause
+
+```
+
+---
+---
+
+##  Contenu du lanceur `run.command`
+
+```bash
+#!/bin/bash
+cd "$(dirname "$0")"
+
+mkdir -p class
+javac -d class $(find src -name "*.java")
+java -cp class src.core.Main
+
+
+read -p "Appuyez sur Entrée pour fermer..."
 
 ```
 
