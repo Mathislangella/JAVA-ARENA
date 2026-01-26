@@ -548,7 +548,7 @@ public class Menu {
     }
 
     private static int CalcateDmg(Monsters atq, Monsters def) {
-        double temp =  (atq.getDmg() * InfoMonstre.getMultiplicateurType(atq.getType(), atq.getType()));
+        double temp =  (atq.getDmg() * InfoMonstre.getMultiplicateurType(atq.getType(), def.getType()));
         int rep = (int) Math.round(temp);
         return rep;
     }   
